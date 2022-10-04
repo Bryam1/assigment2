@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Assignment 2
+        </title>
+
+        <script src="https://unpkg.com/jspsych@7.3.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.1"></script>
+        <link href="https://unpkg.com/jspsych@7.3.0/css/jspsych.css" rel="stylesheet" type="text/css" /> 
+        <script src="list1.js"></script>
+        
+    </head>
+
+<body>
+<script>
+    const jsPsych = initJsPsych();
+
+    var instructions = {
+        type:jsPsychHtmlKeyboardResponse,
+        stimulus: '<p style="font-size: 20px;">Good afternoon. Today you will be participating in a short study. You will be presented with a brief definition of a missing word. Please press the spacebar when you are ready to start.</p>',
+    }
+
+    var Sentence = { 
+        type: jsPsychHtmlKeyboardResponse, 
+        stimulus: jsPsych.timelineVariable('prompt'), 
+        choices: "NO_KEYS", 
+        trial_duration: 5000 
+}
+    var Prime = {
+        type: jsPsychHtmlKeyboardResponse, 
+        stimulus: jsPsych.timelineVariable('prime_given'), 
+        choices: "NO_KEYS", 
+        trial_duration: 250
+}
+    var State = {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: '<p style="font-size: 20px;">Do you know the answer?</p> (a) yes (b) no (c) other word in mind (d) tip of my tongue', 
+        choices: ['a', 'b', 'c', 'd']
+    }
+    var end_experiment = {
+        type: jsPsychHtmlKeyboardResponse,
+        stimulus: 'Thank you for participating! Click any key to end the experiment.'
+};
+    var experiment_procedure =  {
+        timeline: [Sentence, Prime, State],
+        timeline_variables: list1,
+        randomize_order: true 
+    };
+
+
+    jsPsych.run([instructions, experiment_procedure, end_experiment]);
+
+</script>
+</body>
+
+
+</html>
