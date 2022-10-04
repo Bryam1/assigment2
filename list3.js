@@ -115,8 +115,8 @@ var list3 = [
       "target": "Dante",
       "prompt": "Italian poet known for writing The",
       "prime_given": "Inferno",
-      "prime_condition": "DAWN",
-      "list": "phonological"
+      "prime_condition": "phonological",
+      "list": "3"
     },
     {
       "target": "Garland",

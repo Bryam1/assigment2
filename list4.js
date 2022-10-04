@@ -115,8 +115,8 @@ var list4 = [
       "target": "Dante",
       "prompt": "Italian poet known for writing The",
       "prime_given": "Inferno",
-      "prime_condition": "DONNE",
-      "list": "both"
+      "prime_condition": "both",
+      "list": 4
     },
     {
       "target": "Garland",
