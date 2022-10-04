@@ -8,7 +8,11 @@
         <script src="https://unpkg.com/jspsych@7.3.0"></script>
         <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.1"></script>
         <link href="https://unpkg.com/jspsych@7.3.0/css/jspsych.css" rel="stylesheet" type="text/css" /> 
+        <script src="https://unpkg.com/@jspsych/plugin-survey-text@1.1.1"></script>
         <script src="list1.js"></script>
+        <script src="list2.js"></script>
+        <script src="list3.js"></script>
+        <script src="list4.js"></script>
         
     </head>
 
@@ -16,35 +20,91 @@
 <script>
     const jsPsych = initJsPsych();
 
+    var subject_id = Math.floor(Math.random()*100000)
+
     var instructions = {
         type:jsPsychHtmlKeyboardResponse,
-        stimulus: '<p style="font-size: 20px;">Good afternoon. Today you will be participating in a short study. You will be presented with a brief definition of a missing word. Please press the spacebar when you are ready to start.</p>',
+        stimulus: '<p style="font-size: 17px;">Hello. Today you will be participating in a short study. You will be presented with a trivia question for 5 seconds, immediately followed by a prime word. After seeing the prime word for a brief duration, you will be asked if you know the answer, dont know the answer, have another word in mind, or if the answer is at the tip of your tongue. Once you indicate your state, you will be asked to type in your answer. Please press the spacebar when you are ready to start.</p>',
+        data: {
+        typeoftrial: 'instructions',
+        list: jsPsych.timelineVariable('List'),
+        prime_condition: jsPsych.timelineVariable('condition'),
+        subject_id: subject_id
+}
     }
 
     var Sentence = { 
         type: jsPsychHtmlKeyboardResponse, 
         stimulus: jsPsych.timelineVariable('prompt'), 
         choices: "NO_KEYS", 
-        trial_duration: 5000 
+        trial_duration: 5000,
+        data: {
+        typeoftrial: 'sentence',
+        list: jsPsych.timelineVariable('list'),
+        prime_condition: jsPsych.timelineVariable('prime_condition'),
+        subject_id: subject_id
+} 
 }
     var Prime = {
         type: jsPsychHtmlKeyboardResponse, 
         stimulus: jsPsych.timelineVariable('prime_given'), 
         choices: "NO_KEYS", 
-        trial_duration: 250
+        trial_duration: 250,
+        data: {
+        typeoftrial: 'sentence',
+        list: jsPsych.timelineVariable('list'),
+        prime_condition: jsPsych.timelineVariable('prime_condition'),
+        subject_id: subject_id
+}
 }
     var State = {
         type: jsPsychHtmlKeyboardResponse,
-        stimulus: '<p style="font-size: 20px;">Do you know the answer?</p> (a) yes (b) no (c) other word in mind (d) tip of my tongue', 
-        choices: ['a', 'b', 'c', 'd']
+        stimulus: '<p style="font-size: 20px;">Do you know the answer?</p> (A) Yes (B) No (C) Other word in mind (D) Tip of my tongue', 
+        choices: ['a', 'b', 'c', 'd'],
+        data: {
+        typeoftrial: 'sentence',
+        list: jsPsych.timelineVariable('list'),
+        prime_condition: jsPsych.timelineVariable('prime_condition'),
+        subject_id: subject_id
+}
     }
+
+    var Responses = {
+        type: jsPsychSurveyText,
+        questions: [
+        {prompt: 'Type in the word you think it is.'}
+  ], 
+        data: {
+        typeoftrial: 'sentence',
+        list_number: jsPsych.timelineVariable('list'),
+        trialcondition: jsPsych.timelineVariable('prime_condition'),
+        subject: subject_id,
+        data: {
+        typeoftrial: 'sentence',
+        list: jsPsych.timelineVariable('list'),
+        prime_condition: jsPsych.timelineVariable('prime_condition'),
+        subject_id: subject_id
+}
+}
+
+    }
+
     var end_experiment = {
         type: jsPsychHtmlKeyboardResponse,
         stimulus: 'Thank you for participating! Click any key to end the experiment.'
 };
+    var list = [1,2,3,4]
+    var CONDITION = list[Math.floor(Math.random() * list.length)];
+
+    var teststimuli = []
+        if(CONDITION == 1){teststimuli = list1}
+        else if(CONDITION == 2){teststimuli = list2}
+        else if(CONDITION == 3){teststimuli = list3}
+        else{teststimuli = list4}
+
     var experiment_procedure =  {
-        timeline: [Sentence, Prime, State],
-        timeline_variables: list1,
+        timeline: [Sentence, Prime, State, Responses],
+        timeline_variables: teststimuli,
         randomize_order: true 
     };
 
